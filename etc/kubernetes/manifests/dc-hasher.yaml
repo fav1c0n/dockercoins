@@ -20,16 +20,19 @@ spec:
             -
               ruby
           env:
-            -
-              name: TOKEN
+            - name: TOKEN
               value: hola que tal
-            -
-              name: HASHER_RB
-              valueFrom:
-                secretKeyRef: 
-                  key: hasher.rb
-                  name: secret-hasher
-          image: eleigle/ruby:sinatra-thin
+            - name: LANG 
+              value: C.UTF-8
+            - name: GEM_HOME
+              value: /usr/local/bundle
+            - name: BUNDLE_SILENCE_ROOT_WARNING
+              value: "1"
+            - name: BUNDLE_APP_CONFIG
+              value: /usr/local/bundle
+            - name: PATH
+              value: /usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          image: fav1c0n/ruby:sinatra-thin
           name: container-po-hasher
           ports:
             -
