@@ -29,7 +29,7 @@ spec:
             - name: BUNDLE_SILENCE_ROOT_WARNING
               value: "1"
 	    - name: BUNDLE_APP_CONFIG
-              value: $(GEM_HOME)
+	      value: $(GEM_HOME)
             - name: PATH
               value: $(GEM_HOME)/bin:$(PATH)
           image: fav1c0n/ruby:sinatra-thin
