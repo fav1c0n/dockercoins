@@ -29,9 +29,9 @@ spec:
             - name: BUNDLE_SILENCE_ROOT_WARNING
               value: "1"
             - name: BUNDLE_APP_CONFIG
-              value: $(GEM_HOME)
+              value: /usr/local/bundle
             - name: PATH
-              value: $(GEM_HOME)/bin:$(PATH)
+              value: /usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           image: fav1c0n/ruby:sinatra-thin
           name: container-po-hasher
           ports:
