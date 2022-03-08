@@ -29,7 +29,7 @@ spec:
                 secretKeyRef: 
                   key: hasher.rb
                   name: secret-hasher
-          image: eleigle/ruby:sinatra-thin
+          image: fav1c0n/ruby:sinatra-thin
           name: container-po-hasher
           ports:
             -
