@@ -1,0 +1,54 @@
+jobs:
+  test: 
+    runs-on: ubuntu-18.04 
+    steps: 
+      -
+        name: checkout
+        uses: actions/checkout@v2
+      -
+        name: build-context
+        run: mkdir build/
+      -
+        name: build-hasher
+        run: docker build -f hasher/Dockerfile -t fav1c0n/ruby:sinatra-thin hasher/
+      -
+        name: build-rng
+        run: docker build -f rng/Dockerfile -t eleigle/python:Flask build/
+      -
+        name: build-webui
+        run: docker build -f webui/Dockerfile -t eleigle/node:express-redis webui/
+      -
+        name: build-worker
+        run: docker build -f worker/Dockerfile -t eleigle/python:Redis-requests build/
+      -
+        name: kubernetes-install
+        run: |
+          git clone --single-branch -b v2.4 https://github.com/academiaonline-org/kubernetes
+          source kubernetes/bin/cluster/ubuntu18/install-docker-kubelet.sh
+          source kubernetes/bin/cluster/ubuntu18/install-leader.sh
+          master=$( kubectl get node | grep master | awk '{ print $1 }' )
+          kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-
+          rm -rf kubernetes/ 
+      -
+        name: deploy
+        run: kubectl apply -f etc/kubernetes/manifests/
+      -
+        name: test-worker
+        run: |
+          while true
+          do sleep 10
+          kubectl logs dc/dc-worker 2>& 1 | grep Coin.found && break
+          done
+      -
+        name: test-webui
+        run: |
+          while true
+          do sleep 10
+          kubectl logs svc/svc-webui 2>& 1 | grep WEBUI.running && break
+          done
+name: CI
+on: 
+  push: 
+    branches: 
+      - 
+        2022-03-santander
