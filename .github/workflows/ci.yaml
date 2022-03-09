@@ -6,6 +6,9 @@ jobs:
         name: checkout
         uses: actions/checkout@v2
       -
+        name: check-resources
+        run: free -h; df -h; lscpu;
+      -
         name: build-context
         run: mkdir build/
       -
