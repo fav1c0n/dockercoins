@@ -1,0 +1,58 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata: 
+  name: dc-hasher
+spec: 
+  replicas: 1
+  selector: 
+    dockercoins: hasher
+  template:
+    metadata:
+      labels: 
+        dockercoins: hasher
+    spec:
+      containers:
+        -
+          args:
+            -
+              hasher.rb
+          command:
+            -
+              ruby
+          env:
+            - name: TOKEN
+              value: hola que tal
+            - name: LANG 
+              value: C.UTF-8
+            - name: GEM_HOME
+              value: /usr/local/bundle
+            - name: BUNDLE_SILENCE_ROOT_WARNING
+              value: "1"
+            - name: BUNDLE_APP_CONFIG
+              value: /usr/local/bundle
+            - name: PATH
+              value: /usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          name: container-po-hasher
+          ports:
+            -
+              containerPort: 8081
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /hasher/hasher.rb
+              name: volume-po-hasher
+              readOnly: true
+              subPath: hasher.rb
+          workingDir: /hasher/
+      volumes:
+        -
+          name: volume-po-hasher
+          secret:
+            defaultMode: 0400
+            items:
+              -
+                key: hasher.rb
+                mode: 0400
+                path: hasher.rb
+            secretName: secret-hasher
