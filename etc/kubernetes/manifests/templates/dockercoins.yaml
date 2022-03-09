@@ -242,4 +242,4 @@ parameters:
   -
     name: IMAGE_HASHER
     required: true
-    value: fav1c0n/ruby:sinatra-thin
+    value: ''
