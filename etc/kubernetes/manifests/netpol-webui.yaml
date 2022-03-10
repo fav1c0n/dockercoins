@@ -1,0 +1,15 @@
+# Allow incoming traffic to webui
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-webui
+spec:
+  podSelector:
+    matchLabels:
+      dockercoins: webui
+  ingress:
+    - 
+      ports:
+        - 
+          protocol: TCP
+          port: 8080
