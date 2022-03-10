@@ -1,0 +1,22 @@
+#Allow incoming traffic to redis from webui or worker
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-redis
+spec:
+  podSelector:
+    matchLabels:
+      dockercoins: redis
+  ingress:
+    - 
+      from:
+        - podSelector:
+            matchLabels:
+              dockercoins: webui
+        - podSelector:
+            matchLabels:
+              dockercoins: worker
+      ports:
+        - 
+          protocol: TCP
+          port: 6379
